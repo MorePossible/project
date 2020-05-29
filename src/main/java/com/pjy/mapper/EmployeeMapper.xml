@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pjy.mapper.EmployeeMapper">
+    <select id="getEmps" resultMap="myEmpAndDept">
+        select e.id,e.last_name,e.email,e.gender,e.d_id,d.dept_name
+        from employee e join department d
+        on
+        e.d_id = d.id
+        order by
+        id
+    </select>
+    <resultMap id="myEmpAndDept" type="employee">
+        <id column="id" property="id"/>
+        <result column="last_name" property="lastName"/>
+        <result column="email" property="email"/>
+        <result column="gender" property="gender"/>
+        
+        <association property="department" javaType="com.pjy.beans.Department">
+            <id column="d_id" property="id"/>
+            <result column="dept_name" property="deptName"/>
+        </association>
+    </resultMap>
+
+    <insert id="insertEmp">
+        insert into employee(last_name,email,gender,d_id)
+        values (#{lastName},#{email},#{gender},#{department.id})
+    </insert>
+
+    <delete id="deleteEmp">
+        delete from employee
+        where id = #{id}
+    </delete>
+</mapper>
